@@ -1,191 +1,121 @@
-const container = document.getElementById("container");
-const nextBtn = document.getElementById("next-btn");
-const prevBtn = document.getElementById("prev-btn");
-const inputs = document.querySelectorAll(".otp-input");
-const submitBtn = document.getElementById("submit-btn");
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.getElementById("container");
+  const nextBtn = document.getElementById("next-btn");
+  const prevBtn = document.getElementById("prev-btn");
+  const submitBtn = document.getElementById("submit-btn");
+  const keyboard = document.getElementById("keyboard");
 
-let currentIndex = 0;
-let riddles = [];
-let riddleText;
+  let currentIndex = 0;
+  let riddles = [];
+  const inputsList = [];
 
-let answerInput = "";
-const inputsList = [];
+  fetch("./data.json")
+    .then((r) => {
+      if (!r.ok) throw new Error(r.statusText);
+      return r.json();
+    })
+    .then((data) => {
+      riddles = data;
+      renderRiddle(riddles[0]);
+    })
+    .catch(console.error);
 
-fetch("./data.json")
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error("Network response was not ok " + response.statusText);
-    }
-    return response.json();
-  })
-  .then((data) => {
-    riddles = data;
-    const currentRiddle = riddles[currentIndex];
-    renderRiddle(
-      currentRiddle.question,
-      currentRiddle.answer,
-      currentRiddle.hints
-    );
-  })
-  .catch((error) => {
-    console.error("Error loading riddles:", error);
+  nextBtn.addEventListener("click", () => {
+    currentIndex = (currentIndex + 1) % riddles.length;
+    renderRiddle(riddles[currentIndex]);
   });
-
-nextBtn.addEventListener("click", () => {
-  if (riddles.length === 0) return;
-
-  currentIndex++;
-
-  if (currentIndex >= riddles.length) {
-    currentIndex = 0;
-  }
-
-  const currentRiddle = riddles[currentIndex];
-  renderRiddle(
-    currentRiddle.question,
-    currentRiddle.answer,
-    currentRiddle.hints
-  );
-});
-
-prevBtn.addEventListener("click", () => {
-  if (riddles.length === 0) return; // handle no riddles loaded
-
-  currentIndex--;
-
-  if (currentIndex < 0) {
-    currentIndex = riddles.length - 1; // wrap to the last riddle
-  }
-
-  const currentRiddle = riddles[currentIndex];
-  renderRiddle(
-    currentRiddle.question,
-    currentRiddle.answer,
-    currentRiddle.hints
-  );
-});
-
-inputs.forEach((input, index) => {
-  console.log(input);
-  input.addEventListener("input", (e) => {
-    const value = e.target.value;
-    if (value) {
-      // Move to next input
-      if (index < inputs.length - 1) {
-        inputs[index + 1].focus();
-      }
+  prevBtn.addEventListener("click", () => {
+    currentIndex = (currentIndex - 1 + riddles.length) % riddles.length;
+    renderRiddle(riddles[currentIndex]);
+  });
+  submitBtn.addEventListener("click", () => {
+    const answerInput = inputsList.map((i) => i.value).join("");
+    if (
+      answerInput.toLowerCase() === riddles[currentIndex].answer.toLowerCase()
+    ) {
+      alert("Correct!");
+      nextBtn.click();
     }
   });
 
-  input.addEventListener("keydown", (e) => {
-    console.log(e.key);
-    if (e.key === "Backspace" && !e.target.value) {
-      // Move to previous input
-      if (index > 0) {
-        inputs[index - 1].focus();
-      }
-    }
-  });
-});
+  function renderRiddle({ question, answer, hints = [], keys = [] }) {
+    container.innerHTML = "";
+    inputsList.length = 0;
 
-function renderRiddle(question, answer, hints = []) {
-  // Clear container first
-  container.innerHTML = "";
-  inputsList.length = 0;
+    const qEl = document.createElement("h2");
+    qEl.textContent = question;
+    qEl.classList.add("question-header");
+    container.appendChild(qEl);
 
-  // Show the question
-  const riddleText = document.createElement("h2");
-  riddleText.classList.add("riddles");
-  riddleText.textContent = question;
-  container.appendChild(riddleText);
-
-  // Create inputs based on the answer
-  const answerContainer = document.createElement("div");
-  answerContainer.classList.add("answer-inputs");
-
-  for (let i = 0; i < answer.length; i++) {
-    const char = answer[i];
-
-    if (char === " ") {
-      const space = document.createElement("span");
-      space.classList.add("space");
-      space.textContent = " ";
-      answerContainer.appendChild(space);
-    } else {
-      const input = document.createElement("input");
-      input.type = "text";
-      input.maxLength = 1;
-
-      input.classList.add("letter-input");
-
-      // Push to array for easier reference
-      inputsList.push(input);
-
-      if (hints.includes(i)) {
-        input.value = char;
-        input.readOnly = true;
-        input.classList.add("hint");
+    const ansDiv = document.createElement("div");
+    ansDiv.classList.add("answer-inputs");
+    for (let i = 0; i < answer.length; i++) {
+      if (answer[i] === " ") {
+        const sp = document.createElement("span");
+        sp.classList.add("space");
+        sp.textContent = " ";
+        ansDiv.appendChild(sp);
       } else {
-        input.addEventListener("input", (e) => {
-          if (e.target.value) {
-            if (i < answer.length - 1) {
-              // Move to next non-space input
-              for (let j = i + 1; j < inputsList.length; j++) {
-                if (inputsList[j]) {
-                  inputsList[j].focus();
-                  break;
-                }
-              }
-            }
-          }
-        });
-
-        input.addEventListener("keydown", (e) => {
-          if (e.key === "Backspace" && !e.target.value) {
-            if (i > 0) {
-              // Move to previous non-space input
-              for (let j = i - 1; j >= 0; j--) {
-                if (inputsList[j]) {
-                  inputsList[j].focus();
-                  break;
-                }
-              }
-            }
-          }
-        });
+        const inp = document.createElement("input");
+        inp.type = "text";
+        inp.maxLength = 1;
+        inp.classList.add("letter-input");
+        if (hints.includes(i)) {
+          inp.value = answer[i];
+          inp.readOnly = true;
+          inp.classList.add("hint");
+        } else {
+          inp.addEventListener("input", () => moveFocus(1, inp));
+          inp.addEventListener("keydown", (e) => {
+            if (e.key === "Backspace" && !inp.value) moveFocus(-1, inp);
+          });
+        }
+        inputsList.push(inp);
+        ansDiv.appendChild(inp);
       }
-      answerContainer.appendChild(input);
+    }
+    container.appendChild(ansDiv);
+    inputsList.find((i) => !i.readOnly)?.focus();
+
+    // render keyboard
+    keyboard.innerHTML = "";
+    if (keys.length) {
+      const kbRow = document.createElement("div");
+      keys.forEach((k) => {
+        const span = document.createElement("span");
+        span.textContent = k;
+        span.classList.add("key-item");
+        span.addEventListener("click", () => keyboardPress(k));
+        kbRow.appendChild(span);
+      });
+      kbRow.classList.add("key-class");
+      keyboard.appendChild(kbRow);
     }
   }
 
-  container.appendChild(answerContainer);
-
-  const firstInput = answerContainer.querySelector("input");
-  if (firstInput) {
-    firstInput.focus();
-  }
-}
-
-submitBtn.addEventListener("click", () => {
-  // Collect the values from all the inputs inside the answer container
-  let answerInput = "";
-  const answerInputs = document.querySelectorAll(".answer-inputs input");
-  answerInputs.forEach((input) => {
-    answerInput += input.value;
-  });
-
-  const currentRiddle = riddles[currentIndex];
-  if (answerInput.toLowerCase() === currentRiddle.answer.toLowerCase()) {
-    alert("Correct Answer!");
-
-    currentIndex++;
-
-    if (currentIndex >= riddles.length) {
-      alert("You completed all the riddles!");
-      currentIndex = 0; // or handle end of game
+  function moveFocus(direction, fromInput) {
+    const idx = inputsList.indexOf(fromInput);
+    let i = idx + direction;
+    while (i >= 0 && i < inputsList.length) {
+      if (!inputsList[i].readOnly) {
+        inputsList[i].focus();
+        break;
+      }
+      i += direction;
     }
+  }
 
-    const nextRiddle = riddles[currentIndex];
-    renderRiddle(nextRiddle.question, nextRiddle.answer);
+  function keyboardPress(letter) {
+    // Determine which input to fill:
+    let target = document.activeElement;
+    if (!(target instanceof HTMLInputElement) || target.readOnly) {
+      // fallback: first empty writable input
+      target = inputsList.find((inp) => !inp.readOnly && !inp.value);
+    }
+    if (!target) return;
+
+    target.value = letter.toLowerCase();
+    // then move forward
+    moveFocus(1, target);
   }
 });

@@ -9,14 +9,18 @@
   margin-top: 1rem;
 }
 
+.question-header {
+  text-align: center;
+}
+
 .next-btn {
-  width: 10%;
+  width: 5rem;
   height: 40px;
   cursor: pointer;
 }
 
 .prev-btn {
-  width: 10%;
+  width: 5rem;
   height: 40px;
   cursor: pointer;
 }
@@ -71,4 +75,29 @@
 .space {
   display: inline-block;
   width: 20px;
+}
+
+.submit-btn {
+  width: 5rem;
+  height: 40px;
+  cursor: pointer;
+}
+
+.key-class {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.key-item {
+  border: 1px solid #212121;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }

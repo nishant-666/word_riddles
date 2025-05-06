@@ -2,23 +2,61 @@
   {
     "question": "What has keys but can't open locks?",
     "answer": "Piano",
-    "hints": [0, 3]
+    "hints": [0, 3],
+    "keys": ["X", "M", "T", "A", "O", "N", "A", "L", "P", "C", "N", "I"]
   },
   {
     "question": "What has to be broken before you can use it?",
-    "answer": "Egg"
+    "answer": "Egg",
+    "hints": [0],
+    "keys": ["M", "G", "R", "O", "L", "G", "X", "E", "A", "N", "P", "T"]
   },
   {
     "question": "I speak without a mouth and hear without ears. I have no body, but I come alive with the wind. What am I?",
-    "answer": "Echo"
+    "answer": "Echo",
+    "hints": [2],
+    "keys": ["T", "A", "D", "W", "M", "H", "R", "O", "L", "C", "S", "E"]
   },
   {
     "question": "The more of this there is, the less you see. What is it?",
-    "answer": "Darkness"
+    "answer": "Darkness",
+    "hints": [0, 4, 7],
+    "keys": ["M", "D", "S", "U", "A", "N", "S", "E", "P", "L", "R", "K"]
   },
   {
     "question": "I’m tall when I’m young, and I’m short when I’m old. What am I?",
     "answer": "Candle",
-    "hints": [0, 5]
+    "hints": [0, 4, 5],
+    "keys": ["O", "L", "D", "P", "M", "A", "R", "E", "S", "C", "T", "N"]
+  },
+  {
+    "question": "What gets wetter the more it dries?",
+    "answer": "Towel",
+    "hints": [1, 4],
+    "keys": ["A", "T", "W", "Q", "O", "L", "E", "M", "S", "P", "K", "N"]
+  },
+  {
+    "question": "What has a head, a tail, but no body?",
+    "answer": "Coin",
+    "hints": [0, 3],
+    "keys": ["C", "A", "P", "N", "O", "X", "L", "I", "R", "M", "E", "T"]
+  },
+  {
+    "question": "What has many teeth but can’t bite?",
+    "answer": "Comb",
+    "hints": [2, 4],
+    "keys": ["O", "C", "M", "A", "B", "R", "L", "E", "S", "T", "D", "N"]
+  },
+  {
+    "question": "What can travel around the world while staying in the same spot?",
+    "answer": "Stamp",
+    "hints": [0, 2],
+    "keys": ["S", "A", "T", "L", "P", "M", "E", "X", "R", "C", "O", "N"]
+  },
+  {
+    "question": "What has an eye but cannot see?",
+    "answer": "Needle",
+    "hints": [1, 5],
+    "keys": ["N", "E", "D", "L", "O", "E", "S", "R", "T", "A", "M", "P"]
   }
 ]
