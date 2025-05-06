@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const prevBtn = document.getElementById("prev-btn");
   const submitBtn = document.getElementById("submit-btn");
   const keyboard = document.getElementById("keyboard");
+  const toastMessage = document.getElementById("toast-message");
 
   let currentIndex = 0;
   let riddles = [];
@@ -33,8 +34,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (
       answerInput.toLowerCase() === riddles[currentIndex].answer.toLowerCase()
     ) {
-      alert("Correct!");
-      nextBtn.click();
+      toastMessage.style.display = "block";
+      toastMessage.style.backgroundColor = "#008000";
+      toastMessage.textContent = "Your answer is correct!";
+
+      setTimeout(() => {
+        toastMessage.style.display = "none";
+        nextBtn.click();
+      }, 2000);
     }
   });
 

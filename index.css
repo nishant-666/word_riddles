@@ -101,3 +101,16 @@
   align-items: center;
   cursor: pointer;
 }
+
+.toast-message {
+  display: none;
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+
+  width: 15rem;
+  height: 5rem;
+  color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+}
